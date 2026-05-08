@@ -1,0 +1,200 @@
+# Database Systems (CSCI 331)
+# Winter 2026
+# Assignment 2 - Relational Algebra in Python
+# Andre King
+
+import copy
+import texttable
+import OutputUtil as ou
+
+# Create
+# reads a CSV file into a 2-D table with row[0] being the column headings
+def create(file_name):
+   # open a file
+   with open(file_name) as file:
+       return [line.strip().split(",") for line in file.readlines()]
+
+# Write Relation
+def write_relation(name, data):
+    ou.write_tt_file(None, name, data[0], data[1:], ["l"] * len(data[0]))
+
+# Display
+# displays a two-dimensional table with column headings in a pretty, tabular format
+def display(table):
+   headers = table[0]
+   data = table[1:]
+   alignment = ["l"] * len(headers)
+   rows = [headers] + data
+   tt = texttable.Texttable(0)
+   tt.set_cols_align(alignment)
+   tt.add_rows(rows, header=True)
+   print(tt.draw())
+
+# Rename
+# renames the column heading previously called old_name with new_name
+def rename(table, old_name, new_name):
+   table2 = copy.deepcopy(table)
+   for i in range(len(table[0])):
+      if table[0][i] == old_name:
+         table2[0][i] = new_name
+         break
+   return table2
+
+# Project
+# returns a new 2-D table with only the column names provided in the list column_names
+# if column_names is “*”, then include all columns
+def project(table, column_names=["*"]):
+   if column_names == ["*"]:
+      return table  # Return the original table if all columns are requested
+
+   # Find indices of the columns to include in the projection
+   column_indices = [i for i, col in enumerate(table[0]) if col in column_names]
+
+   # Create a new table with only the selected columns
+   projected_table = [[row[i] for i in column_indices] for row in table]
+
+   return projected_table
+
+# Select
+# return a table of all rows that satisfy the criteria,
+#     a tuple of the form (column_name,column_value)
+# if no criteria is provided, return all rows
+def select(table, criteria=None):
+   if not criteria:
+      return table
+   col = criteria[0]
+   val = criteria[1]
+   col_num = -1
+   for j in range(len(table[0])):
+      if table[0][j] == col:
+         col_num = j
+   if col_num < 0:
+      return table
+   table2 = [table[0]]
+   for i in range(1, len(table)):
+      if table[i][col_num] == val:
+         table2.append(table[i])
+   return table2
+
+# Merge
+# merges the two sets of results
+def merge(results1, results2):
+   # Combine the headers
+   merged_headers = results1[0]
+   # Combine the data
+   merged_data = results1[1:] + results2[1:]
+   # Combine the headers and data into a new table
+   merged_table = [merged_headers] + merged_data
+   return merged_table
+
+
+# Cartesian Product
+def cart_prod(table1, table2):
+   table3 = [table1[0] + table2[0]]
+   for i1 in range(1, len(table1)):
+      for i2 in range(1, len(table2)):
+         table3.append(table1[i1] + table2[i2])
+   return table3
+
+# Join
+# use a nested loop to match rows between the two tables based on the join_column provided
+# if join_column is not provided, then provide a cross-product, that is a copy of each row
+#     in table1 together with a row from table2
+def join(table1, table2, join_column=None):
+   table3 = cart_prod(table1, table2)
+   if not join_column:
+      return table3
+   col1 = -1
+   col2 = -1
+   for j in range(len(table1[0])):
+      if table1[0][j] == join_column[0]:
+         col1 = j
+   for j in range(len(table2[0])):
+      if table2[0][j] == join_column[1]:
+         col2 = j + len(table1[0])
+   table4 = [table3[0]]
+   for i in range(1, len(table3)):
+      if table3[i][col1] == table3[i][col2]:
+         table4.append(table3[i])
+   return table4
+
+
+# Sort
+# create a sorted copy of the table in ascending order by the values in column column_name
+def sort(table, column_name):
+    index = table[0].index(column_name)
+    sorted_table = sorted(table[1:], key=lambda x: x[index])
+    sorted_table.insert(0, table[0])  # Re-insert headers
+    return sorted_table
+
+
+def table_to_html(table, i):
+   title = f"table{i}"
+   headers = table[0]
+   alignments = ["l"] * len(headers)
+   types = ["S"] * len(headers)
+   data = table[1:]
+   return [title, headers, types, alignments, data]
+
+
+
+def main():
+    advisor = create("../udb/udb_advisor.txt")
+    classroom = create("../udb/udb_classroom.txt")
+    course = create("../udb/udb_course.txt")
+    department = create("../udb/udb_department.txt")
+    instructor = create("../udb/udb_instructor.txt")
+    prereq = create("../udb/udb_prereq.txt")
+    section = create("../udb/udb_section.txt")
+    student = create("../udb/udb_student.txt")
+    takes = create("../udb/udb_takes.txt")
+    teaches = create("../udb/udb_teaches.txt")
+    timeslot = create("../udb/udb_timeslot.txt")
+    write_relation("advisor", advisor)
+    write_relation("classroom", classroom)
+    write_relation("course", course)
+    write_relation("department", department)
+    write_relation("instructor", instructor)
+    write_relation("prereq", prereq)
+    write_relation("section", section)
+    write_relation("students", student)
+    write_relation("takes", takes)
+    write_relation("teaches", teaches)
+    write_relation("timeslot", timeslot)
+
+    teaches2 = rename(teaches, "ID", "Instructor_ID")
+    write_relation("teaches2", teaches2)
+
+    teaches3 = project(teaches2, ["*"])
+    write_relation("teaches3", teaches3)
+
+    teaches4 = project(teaches3, ["course_id"])
+    write_relation("teaches4", teaches4)
+
+    courses_bio = select(course, ["dept_name", "Biology"])
+    write_relation("course_bio", courses_bio)
+
+    courses_compsci = select(course, ["dept_name", "Comp. Sci."])
+    write_relation("courses_compsci", courses_compsci)
+
+    courses_bio_compsci = merge(courses_bio, courses_compsci)
+    write_relation("course_bio_compsci", courses_bio_compsci)
+
+    instructor_teaches_silly = cart_prod(instructor, teaches)
+    write_relation("instructor_teaches_silly", instructor_teaches_silly)
+
+    instructor_teaches = join(instructor, teaches, join_column=["ID", "ID"])
+    write_relation("instructor_teaches", instructor_teaches)
+
+    instructor_teaches_sorted = sort(instructor_teaches, "name")
+    write_relation("instructor_teaches_sorted", instructor_teaches_sorted)
+
+    stuff = [advisor, classroom, course, department, instructor, prereq, section,
+             student, takes, teaches, timeslot,courses_bio_compsci, instructor_teaches_sorted]
+    tables = [table_to_html(stuff[i], i + 1) for i in range(len(stuff))]
+    ou.write_html_file_new("Assignment02.html", "output for assignment 2", None,
+                           tables, True, None, True, False)
+
+
+if __name__ == "__main__":
+    main()
