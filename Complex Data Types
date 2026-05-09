@@ -1,0 +1,33 @@
+# Database Systems (CSCI 331)
+# Winter 2026
+# Assignment 7 - Complex Data Types
+# Andre King
+
+import DBUtil
+import OutputUtil as ou
+
+def main():
+    db = "udb"
+    user = "Andre"
+    assignment = "07"
+    DBUtil.read_and_run_queries(None, db, user, '07a')
+
+    tables = ["advisor", "classroom", "course", "department", "instructor", "prereq", "section", "student", "takes", "teaches", "time_slot"]
+    for table in tables:
+        DBUtil.backup_table(table, user, 'udb', assignment)
+    DBUtil.read_and_run_queries(None, db, user, '07')
+
+    udb_tables = ["advisor", "classroom", "course", "department", "instructor", "prereq", "section", "student", "takes",
+                  "teaches", "time_slot"]
+
+    html_tables = []
+    for table in udb_tables:
+        html_tables += DBUtil.restore_data(table, db, assignment, user)
+
+    output_file = f"Assignment{assignment}-restoration.html"
+    title = "Restoration of all original University Database Tables"
+    ou.write_html_file_new(output_file, title, None, html_tables, True, None, True, True)
+
+
+if __name__ == "__main__":
+    main()
