@@ -1,0 +1,25 @@
+# Database Systems (CSCI 331)
+# Winter 2026
+# Assignment 13 - Pivot Tables in SQL
+# Andre King
+
+import DBUtil
+import OutputUtil
+import OutputUtil as ou
+
+def make_pivot_table(assn, user, db, table, col_x, col_y, col_val):
+    title, headers, types, alignments, data = DBUtil.pivot_table(assn, user, db, table, col_x, col_y, col_val)
+    OutputUtil.write_html_file(f"Assignment{assn}-{db}-{table}-sales.html", title, headers, types, alignments, data, True)
+
+db = "sales"
+user = "Andre"
+assn = "13"
+DBUtil.read_and_run_queries(None, db, user, assn)
+
+
+make_pivot_table(assn, user, db, 'sale', 'product_name', 'store_location', "num_sales")
+
+make_pivot_table(assn, user, "udb", 'instructor', 'dept_name', 'name', "salary")
+
+make_pivot_table(assn, user, 'meta', 'query', 'query_db', 'query_assn', "query_dur")
+
