@@ -1,0 +1,34 @@
+# Database Systems (CSCI 331)
+# Winter 2026
+# Assignment 12 - Database Table and Record Storage
+# Andre King
+
+import DBUtil
+import OutputUtil as ou
+
+
+def main():
+    db = "udb"
+    user = "Andre"
+    assn = "12"
+    file_name = f"Assignment{assn}.sql"
+    DBUtil.read_and_run_queries(file_name, db, user, assn)
+
+    tables = ["advisor", "classroom", "course", "department", "instructor", "prereq", "section", "student", "takes", "teaches", "time_slot"]
+    queries = []
+    for table in tables:
+        sql = f"SELECT * FROM {table}"
+        desc = f"Show all columns in the table {table}"
+        queries.append((sql, desc))
+
+    # Fixed-length record output
+    html_tables_f = DBUtil.run_queries(queries, user, db, assn, "F")
+    ou.write_html_file_new("assignment12-fixed.html", "Assignment12_fixed", None, html_tables_f, True)
+
+    # Variable-length record output
+    html_tables_v = DBUtil.run_queries(queries, user, db, assn, "V")
+    ou.write_html_file_new("assignment12-variable.html", "Assignment12_variable", None, html_tables_v, True)
+
+if __name__ == "__main__":
+    main()
+
