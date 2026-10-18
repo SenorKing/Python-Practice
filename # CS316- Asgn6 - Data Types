@@ -1,0 +1,166 @@
+# Programming Languages (CSCI 316)
+# Summer 2026
+# Assignment 6 - Data Types
+# Andre King
+
+
+def print_variable_info(v):
+    print("Value = ", v, "Type = ", type(v), "ID = ", id(v))
+
+
+def describe_value(v):
+    if type(v) is int:
+        return "Integer"
+    elif type(v) is float:
+        return "Float"
+    elif type(v) is str:
+        return "String"
+    elif type(v) is bool:
+        return "Boolean"
+    elif type(v) is list:
+        return "List"
+    elif type(v) is tuple:
+        return "Tuple"
+    elif type(v) is dict:
+        return "Dictionary"
+    elif type(v) is None:
+        return "None"
+    else:
+        return "Other Type"
+
+def Task1():
+    v_int = 42
+    v_float = 42.18
+    v_bool = False
+    v_string = "Hello World"
+    v_none = None
+    vars = [v_int, v_float, v_bool, v_string, v_none]
+    for var in vars:
+        print_variable_info(var)
+
+
+def Task2():
+    data = 25
+    print_variable_info(data)
+    data = "hello"
+    print_variable_info(data)
+    data = 3.14
+    print_variable_info(data)
+    data = True
+    print_variable_info(data)
+
+
+def Task3():
+    v_str = "Test"
+    print_variable_info(v_str)
+    v_str += "2"
+    print_variable_info(v_str)
+    v_tuple = (3, 5)
+    print_variable_info(v_tuple)
+    #v_tuple += (4) ##Not Allowed
+    v_list = [1, 2, 3]
+    print_variable_info(v_list)
+    v_list += [4]
+    print_variable_info(v_list)
+    v_dict = {
+        "a": 1, "b": 2
+    }
+    print_variable_info(v_dict)
+    v_dict["c"] = 3
+    print_variable_info(v_dict)
+
+
+def Task4():
+    v_str_to_int = int("123")
+    print_variable_info(v_str_to_int)
+    v_str_to_float = float("3.14")
+    print_variable_info(v_str_to_float)
+    v_int_to_str = str(100)
+    print_variable_info(v_int_to_str)
+    v_int_to_bool0 = bool(0)
+    print_variable_info(v_int_to_bool0)
+    v_int_to_bool1 = bool(1)
+    print_variable_info(v_int_to_bool1)
+    v_str_to_list = list("hello")
+    print_variable_info(v_str_to_list)
+    v_list_to_tuple = tuple([1, 2, 3])
+    print_variable_info(v_list_to_tuple)
+
+
+def Task5():
+    v_int = 42
+    v_float = 42.89
+    v_bool = False
+    v_string = "Hello World"
+    v_list = [1, 2, 3]
+    v_tuple = (1, 2)
+    v_dict = {
+        "a": 1, "b": 2
+    }
+    v_none = None
+    v_func = Task4
+    vars = [v_int, v_float, v_bool, v_string, v_list, v_tuple, v_dict ,v_none, v_func]
+    for var in vars:
+        print(var, describe_value(var))
+
+class student:
+    name = None
+    student_id = None
+    major = None
+    credits = None
+
+    def __init__(self, name, student_id, major, credits):
+        self.name = name
+        self.student_id = student_id
+        self.major = major
+        self.credits = credits
+
+    def display_info(self):
+        print("Name : ", self.name, "StudentID : ", self.student_id, "Major : ", self.major, "Credits : ", self.credits)
+
+    def addCredits(self, credit):
+        self.credits += credit
+
+    def isSenior(self):
+        return self.credits >= 90
+
+
+def Task6():
+    s=student("Sarah", 12345678, "Computer Science", 87)
+    print_variable_info(s)
+    s.display_info()
+    print(s.isSenior())
+    s.addCredits(6)
+    print(s.isSenior())
+    print_variable_info(s)
+
+
+def add_numbers(a: int, b:  int) -> int:
+    if type(a) is int and type(b) is int:
+        return a + b
+    else:
+        return "Atleast 1 parameter is not an integer"
+
+
+def Task7():
+    x = 1
+    y = 3.5
+    print(add_numbers(x, y))
+    w = 1
+    z = 3
+    print(add_numbers(w, z))
+
+def main():
+    Tasks = [Task1, Task2, Task3, Task4, Task5, Task6, Task7]
+    for task in Tasks:
+        print(task.__name__)
+        task()
+        print("="*50)
+
+if __name__ == "__main__":
+    main()
+
+
+
+
+
