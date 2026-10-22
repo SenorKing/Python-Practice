@@ -42,11 +42,11 @@ else:
 ################# calculate tax in Canada ###################
 tax = 0.0
 country = input("What country are you from?")
-province = input("What Province are you from?")
 
+if country.lower() == 'canada':
+    province = input("What Province are you from?")
 
-if country == 'Canada':
-    if province in ('Yukon', 'Alberta', 'Nunavut'):
+    if province.lower() in ('yukon', 'alberta', 'nunavut'):
         tax = 0.05
     elif province == 'Ontario':
         tax = 0.13
