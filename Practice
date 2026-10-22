@@ -17,7 +17,7 @@ def main():
 if __name__ == "__main__":
     main()
 
-#######################################
+############################################
 
 print("Hello World")
 name = input("What is your name?")
@@ -34,6 +34,30 @@ elif x < y:
 else:
     print("x and y are equal")
 
+############################################
+
+
+
+
+################# calculate tax in Canada ###################
+tax = 0.0
+country = input("What country are you from?")
+province = input("What Province are you from?")
+
+
+if country == 'Canada':
+    if province in ('Yukon', 'Alberta', 'Nunavut'):
+        tax = 0.05
+    elif province == 'Ontario':
+        tax = 0.13
+    else:
+        tax = 0.15
+else:
+    tax = 0
+
+print("Hello " + name + ", Your Tax Rate = " + str(tax) )
+
+##################################################################
 
 
 
