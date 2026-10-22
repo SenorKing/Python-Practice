@@ -60,6 +60,18 @@ print("Hello " + name + ", Your Tax Rate = " + str(tax) )
 ##################################################################
 
 
+######################### Honor Roll Bool #############################
+#honor roll if average is more than 85 and all grades are above 70%
+
+gpa = float(input("Enter your GPA: "))
+lowest_grade = float(input("What is your lowest grade: "))
+
+if gpa >= 3.5 and lowest_grade >= 70:
+    print("Congrats " + name + ", You made the Honor Roll!")
+
+########################################################################
+
+
 
 
 
